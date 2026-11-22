@@ -74,6 +74,11 @@ jobs:
           name: linux-binaries
           path: .
 
+      - name: Setup V
+        uses: vlang/setup-v@v1.7
+        with:
+          check-latest: true
+
       - name: Prepare binaries
         run: v make.vsh dist
 
