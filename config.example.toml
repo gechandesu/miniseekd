@@ -1,0 +1,29 @@
+[soulseek]
+server-host = 'vps.slsknet.org'
+server-port = 2271
+username = 'your_username' # or set SLSK_USERNAME
+password = 'your_password' # or set SLSK_PASSWORD or SLSK_PASSWORD_FILE
+listen-host = '0.0.0.0'
+listen-port = 50300 # forward this port on your router
+description = 'A Soulseek user'
+
+[shares]
+# Absolute paths of directories to serve
+directories = ['/home/user/Music']
+# Regular expressions matched against the full
+# path of each file; matching files are not shared.
+filters = ['\.ini$', 'Thumbs\.db$', '\.DS_Store$']
+rescan-interval-minutes = 0 # 0 = only scan at startup and on SIGHUP
+
+[transfers.upload]
+slots = 5 # simultaneous uploads
+speed-limit-kib = 0 # per upload, KiB/s, 0 = unlimited
+max-queued-per-user = 50
+
+[logging]
+level = 'info' # debug | info | warn | error
+file = '/var/log/miniseekd.log' # empty = console only
+console = true
+
+[daemon]
+pid-file = '' # e.g. '/run/miniseekd.pid'

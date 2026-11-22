@@ -1,0 +1,23 @@
+[Unit]
+Description=Soulseek file serving daemon
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# adjust the paths to your installation
+ExecStart=/usr/local/bin/miniseekd --config /etc/miniseekd/config.toml
+# SIGHUP re-reads the configuration, rescans the shares and reopens the log file
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartSec=10
+User=soulseek
+Group=soulseek
+# the log file configured in config.toml should live in a directory writable by this user
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/var/log/miniseekd
+
+[Install]
+WantedBy=multi-user.target
