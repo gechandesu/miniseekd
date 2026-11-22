@@ -4,7 +4,7 @@ import os
 import regex
 import sync
 import time
-import proto
+import lib.proto
 
 // max_search_results caps the number of files returned for a single search.
 pub const max_search_results = 500

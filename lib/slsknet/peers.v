@@ -2,9 +2,9 @@ module slsknet
 
 import net
 import time
-import proto
-import shares
-import uploads
+import lib.proto
+import lib.shares
+import lib.uploads
 
 // ---------------------------------------------------------------------------
 // listener

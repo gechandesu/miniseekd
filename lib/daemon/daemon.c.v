@@ -2,9 +2,20 @@ module daemon
 
 import os
 
-fn C.setsid() int
-fn C.dup2(oldfd int, newfd int) int
-fn C.kill(pid int, sig int) int
+$if windows {
+	#include <windows.h>
+
+	fn C.OpenProcess(dwDesiredAccess u32, bInheritHandle int, dwProcessId u32) voidptr
+	fn C.GetLastError() u32
+	fn C.CloseHandle(handle voidptr) int
+} $else {
+	#include <sys/types.h>
+	#include <signal.h>
+	#include <errno.h>
+
+	fn C.setsid() int
+	fn C.kill(pid int, sig int) int
+}
 
 // sig_flags is written from signal handlers and polled by the main loop:
 // index 0 = stop requested, index 1 = reload requested.
@@ -64,8 +75,10 @@ pub fn daemonize() ! {
 	if pid > 0 {
 		exit(0)
 	}
-	if C.setsid() < 0 {
-		return error('setsid failed')
+	$if !windows {
+		if C.setsid() < 0 {
+			return error('setsid failed')
+		}
 	}
 	pid = os.fork()
 	if pid < 0 {
@@ -76,9 +89,9 @@ pub fn daemonize() ! {
 	}
 	os.chdir('/') or {}
 	devnull := os.open_file('/dev/null', 'r+') or { return error('cannot open /dev/null: ${err}') }
-	C.dup2(devnull.fd, 0)
-	C.dup2(devnull.fd, 1)
-	C.dup2(devnull.fd, 2)
+	_ := os.fd_dup2(devnull.fd, 0)
+	_ := os.fd_dup2(devnull.fd, 1)
+	_ := os.fd_dup2(devnull.fd, 2)
 }
 
 // check_pid_file fails if `path` names a pid file of a process that is still alive.
@@ -88,8 +101,42 @@ pub fn check_pid_file(path string) ! {
 	}
 	text := os.read_file(path) or { return }
 	pid := text.trim_space().int()
-	if pid > 0 && pid != os.getpid() && (C.kill(pid, 0) == 0 || os.is_dir('/proc/${pid}')) {
+	if pid > 0 && pid != os.getpid() && check_pid_exists(pid)! {
 		return error('another instance seems to be running (pid ${pid}, pid file ${path})')
+	}
+}
+
+fn check_pid_exists(pid int) !bool {
+	if pid <= 0 {
+		return error('pid must be a positive process ID')
+	}
+
+	$if windows {
+		handle := C.OpenProcess(C.PROCESS_QUERY_LIMITED_INFORMATION, 0, u32(pid))
+		if handle == unsafe { nil } {
+			// ERROR_INVALID_PARAMETER means the PID does not exist.
+			// Other errors (such as access denied) don't establish that.
+			if C.GetLastError() == C.ERROR_INVALID_PARAMETER {
+				return false
+			}
+			return error('could not determine whether the process exists')
+		}
+		C.CloseHandle(handle)
+		return true
+	} $else {
+		if C.kill(pid, 0) == 0 {
+			return true
+		}
+
+		err := C.errno
+		if err == C.ESRCH {
+			return false
+		}
+		if err == C.EPERM {
+			// The process exists, but this user lacks permission to signal it.
+			return true
+		}
+		return error('could not determine whether the process exists')
 	}
 }
 

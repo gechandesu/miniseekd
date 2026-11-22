@@ -4,9 +4,9 @@ import net
 import os
 import rand
 import time
-import conf
-import logx
-import proto
+import lib.conf
+import lib.logx
+import lib.proto
 
 // ---------------------------------------------------------------------------
 // helpers: a scripted fake Soulseek server and a fake remote peer ("bob")

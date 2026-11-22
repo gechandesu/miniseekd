@@ -3,15 +3,15 @@ module main
 import flag
 import os
 import time
-import conf
-import daemon
-import logx
-import slsknet
+import lib.conf
+import lib.daemon
+import lib.logx
+import lib.slsknet
 
 const version = '0.1.0'
+const usage = 'Usage: miniseekd [OPTION]'
+const default_config_path = 'config.toml'
 
-@[name: 'miniseekd']
-@[xdoc: 'Headless Soulseek client that serves files from configured directories.']
 struct Flags {
 	help     bool   @[xdoc: 'show this help message and exit']
 	version  bool   @[xdoc: 'show version info and exit']
@@ -21,17 +21,21 @@ struct Flags {
 }
 
 fn main() {
+	help := flag.to_doc[Flags](
+		options: flag.DocOptions{
+			compact: true
+		}
+	)!
+
 	flags, unmatched := flag.to_struct[Flags](os.args, skip: 1) or {
 		eprintln('error: ${err}')
+		println(usage)
+		println(help)
 		exit(2)
 	}
 
 	if flags.help {
-		help := flag.to_doc[Flags](
-			options: flag.DocOptions{
-				compact: true
-			}
-		)!
+		println(usage)
 		println(help)
 		return
 	}
@@ -43,10 +47,12 @@ fn main() {
 
 	if unmatched.len > 0 {
 		eprintln('error: unrecognized arguments: ${unmatched.join(' ')}')
+		println(usage)
+		println(help)
 		exit(2)
 	}
 
-	config_path := os.abs_path(flags.config)
+	config_path := os.abs_path(if flags.config != '' { flags.config } else { default_config_path })
 	mut cfg := conf.load(config_path) or {
 		eprintln('error: ${err}')
 		exit(2)

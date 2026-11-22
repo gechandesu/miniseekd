@@ -3,11 +3,11 @@ module slsknet
 import net
 import sync
 import time
-import conf
-import logx
-import proto
-import shares
-import uploads
+import lib.conf
+import lib.logx
+import lib.proto
+import lib.shares
+import lib.uploads
 
 // Error codes carried by errors returned from Client.run().
 pub const err_code_auth = 7001 // authentication was rejected; retrying is pointless

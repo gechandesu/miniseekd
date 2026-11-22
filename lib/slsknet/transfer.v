@@ -2,8 +2,8 @@ module slsknet
 
 import os
 import time
-import proto
-import uploads
+import lib.proto
+import lib.uploads
 
 const upload_chunk_size = 64 * 1024
 

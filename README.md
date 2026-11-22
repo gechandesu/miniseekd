@@ -76,6 +76,23 @@ Optimized production build:
 v -prod .
 ```
 
+make.vsh script is used for release builds. It cross-compiles program for
+many targets using prebuilt toolchains. Linux builds is statically linked
+with musl libc.
+
+Look at [Releases](https://github.com/gechandesu/miniseekd/releases) page for
+prebuilt binaries for your platform.
+
+```sh
+./make.vsh all # build program for all targets
+```
+
+See `./make.vsh --tasks` for all available options.
+
+## Docker
+
+TBD.
+
 ## Configuration
 
 See [config.example.toml](config.example.toml) for example configuration. Copy

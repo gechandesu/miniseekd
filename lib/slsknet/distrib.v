@@ -1,7 +1,7 @@
 module slsknet
 
 import time
-import proto
+import lib.proto
 
 const first_message_timeout = 10 * time.second
 

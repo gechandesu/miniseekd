@@ -1,7 +1,7 @@
 module slsknet
 
-import proto
-import shares
+import lib.proto
+import lib.shares
 
 const max_search_responses_inflight = 8
 

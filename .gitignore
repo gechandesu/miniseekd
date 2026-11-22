@@ -1,6 +1,8 @@
 # Binaries for programs and plugins
 main
 miniseekd
+miniseekd-*
+make
 *.exe
 *.exe~
 *.so
@@ -9,6 +11,7 @@ miniseekd
 
 # Ignore binary output folders
 bin/
+dist/
 
 # Ignore common editor/system specific metadata
 .DS_Store
@@ -23,6 +26,8 @@ config.toml
 # Web assets and local databases
 *.db
 *.js
+
+.toolchains/
 
 # Modules installed with `v install --local` land beside this file, one
 # directory per module. Add them here if they should stay out of the repo.

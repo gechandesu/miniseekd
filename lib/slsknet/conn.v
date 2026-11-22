@@ -3,7 +3,7 @@ module slsknet
 import net
 import sync
 import time
-import proto
+import lib.proto
 
 // Conn is a TCP connection with a write lock and idempotent close.
 @[heap]

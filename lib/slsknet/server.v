@@ -2,7 +2,7 @@ module slsknet
 
 import net
 import time
-import proto
+import lib.proto
 
 // session connects, authenticates and processes server messages until the connection ends.
 fn (mut c Client) session() ! {
