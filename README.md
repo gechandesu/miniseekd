@@ -108,7 +108,7 @@ Background daemon:
 miniseekd --config config.toml --daemon --pid-file /run/miniseekd.pid
 ```
 
-Also you can use systemd unit, see [mimisould.service](mimisould.service)
+Also you can use systemd unit, see [miniseekd.service](miniseekd.service)
 example file.
 
 ## Signals
