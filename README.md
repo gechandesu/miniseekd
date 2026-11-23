@@ -15,6 +15,10 @@ client for sharing your music.
 > [slskd](https://github.com/slskd/slskd).
 > This project supports **only file uploads**.
 
+> [!WARNING]
+> **nightseekd** is at a very early stage of development; it is not
+> recommended for use in production until it reaches version 1.0.
+
 ## Why
 
 The reason for creating **nightseekd** is that I needed to expose my music
@@ -40,7 +44,7 @@ with 5700 files served:
 
 | App | Binary size | CPU% | Memory usage |
 | --- | --- | --- | --- |
-| nightseekd | 2.5 MiB (static musl) | ~ 0.0 | ~ 21.1 MiB |
+| nightseekd | 2.5 MiB (static musl) | ~ 0.0 | ~ 40 MiB |
 | slskd | 113 MiB (dynamic musl) | ~ 1.0 | ~ 250 MiB |
 
 ## Features
