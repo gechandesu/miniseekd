@@ -1,0 +1,11 @@
+services:
+  nightseekd:
+    image: ghcr.io/gechandesu/nightseekd:latest
+    container_name: nightseekd
+    restart: unless-stopped
+    command: [--config, /data/config.toml]
+    ports:
+      - '50300:50300'
+    volumes:
+      - './data:/data:ro'
+      - '/path/to/share:/share:ro'

@@ -6,7 +6,7 @@ import lib.proto
 
 // session connects, authenticates and processes server messages until the connection ends.
 fn (mut c Client) session() ! {
-	addr := '${c.cfg.soulseek.address}:${c.cfg.soulseek.port}'
+	addr := '${c.cfg.soulseek.server_host}:${c.cfg.soulseek.server_port}'
 	c.log.info('connecting to Soulseek server ${addr}')
 	tc := dial_timeout(addr, 15 * time.second)!
 	mut conn := new_conn(tc, '', 'S', false)

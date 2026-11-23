@@ -8,8 +8,9 @@ import lib.daemon
 import lib.logx
 import lib.slsknet
 
+const name = 'nightseekd'
 const version = '0.1.0'
-const usage = 'Usage: miniseekd [OPTION]'
+const usage = 'Usage: ${name} [OPTION]'
 const default_config_path = 'config.toml'
 
 struct Flags {
@@ -86,7 +87,7 @@ fn main() {
 		eprintln('error: ${err}')
 		exit(2)
 	}
-	logger.info('miniseekd ${version} starting (pid ${os.getpid()}, config ${config_path})')
+	logger.info('${name} ${version} starting (pid ${os.getpid()}, config ${config_path})')
 
 	daemon.write_pid_file(cfg.daemon.pid_file) or {
 		logger.error('${err}')
@@ -97,13 +98,15 @@ fn main() {
 		exit(1)
 	}
 
-	eprintln($embed_file('logo.ascii').to_string())
+	if cfg.logging.console {
+		println($embed_file('logo.ascii').to_string())
+	}
 	code := serve(mut logger, cfg, config_path)
 	if code != 0 && !flags.daemon {
-		eprintln('miniseekd failed, see the log for details')
+		eprintln('${name} failed, see the log for details')
 	}
 	daemon.remove_pid_file(cfg.daemon.pid_file)
-	logger.info('miniseekd stopped')
+	logger.info('${name} stopped')
 	logger.close()
 	exit(code)
 }

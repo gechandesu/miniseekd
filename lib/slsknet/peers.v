@@ -11,7 +11,7 @@ import lib.uploads
 // ---------------------------------------------------------------------------
 
 fn (mut c Client) start_listener() ! {
-	addr := '${c.cfg.soulseek.listen_ip}:${c.cfg.soulseek.listen_port}'
+	addr := '${c.cfg.soulseek.listen_host}:${c.cfg.soulseek.listen_port}'
 	l := net.listen_tcp(.ip, addr) or {
 		return error_with_code('cannot listen on ${addr}: ${err}', err_code_listen)
 	}

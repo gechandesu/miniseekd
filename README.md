@@ -1,8 +1,9 @@
 ```
-         _      _             __      __
-  __ _  (_)__  (_)__ ___ ___ / /_____/ /
- /  ' \/ / _ \/ (_-</ -_) -_)  '_/ _  /
-/_/_/_/_/_//_/_/___/\__/\__/_/\_\\_,_/
+        _      __   __              __      __
+  ___  (_)__ _/ /  / /____ ___ ___ / /_____/ /
+ / _ \/ / _ `/ _ \/ __(_-</ -_) -_)  '_/ _  /
+/_//_/_/\_, /_//_/\__/___/\__/\__/_/\_\\_,_/
+       /___/
 ```
 
 Headless uploads-only [Soulseek](https://en.wikipedia.org/wiki/Soulseek)
@@ -16,7 +17,7 @@ client for sharing your music.
 
 ## Why
 
-The reason for creating **miniseekd** is that I needed to expose my music
+The reason for creating **nightseekd** is that I needed to expose my music
 collection to Soulseek from a host running on a RISC-V architecture CPU.
 slskd is written in C# (using the .NET framework), which makes running it
 on RISC-V quite difficult.
@@ -39,7 +40,7 @@ with 5700 files served:
 
 | App | Binary size | CPU% | Memory usage |
 | --- | --- | --- | --- |
-| miniseekd | 2.5 MiB (static musl) | ~ 0.0 | ~ 21.1 MiB |
+| nightseekd | 2.5 MiB (static musl) | ~ 0.0 | ~ 21.1 MiB |
 | slskd | 113 MiB (dynamic musl) | ~ 1.0 | ~ 250 MiB |
 
 ## Features
@@ -80,7 +81,7 @@ make.vsh script is used for release builds. It cross-compiles program for
 many targets using prebuilt toolchains. Linux builds is statically linked
 with musl libc.
 
-Look at [Releases](https://github.com/gechandesu/miniseekd/releases) page for
+Look at [Releases](https://github.com/gechandesu/nightseekd/releases) page for
 prebuilt binaries for your platform.
 
 ```sh
@@ -91,7 +92,26 @@ See `./make.vsh --tasks` for all available options.
 
 ## Docker
 
-TBD.
+**nightseekd** is available as a multi-platform Docker image:
+
+```sh
+docker pull ghcr.io/gechandesu/nightseekd:latest
+```
+
+Prepare configuration file (see [Configuration](#configuration) below):
+
+```sh
+mkdir -p nightseekd/data
+vim nightseekd/data/config.toml # create configuration file
+```
+
+Copy and modify the [docker-compose.yaml](docker-compose.yaml) then run:
+
+```sh
+docker compose up -d
+```
+
+See note about listen port in [Running](#running) below.
 
 ## Configuration
 
@@ -116,16 +136,22 @@ it via environment variables:
 Foreground, logging to the console and to the file configured in `config.toml`:
 
 ```sh
-miniseekd --config config.toml
+nightseekd --config config.toml
 ```
 
-Background daemon:
+Daemon:
 
 ```sh
-miniseekd --config config.toml --daemon --pid-file /run/miniseekd.pid
+nightseekd --config config.toml --daemon --pid-file /run/nightseekd.pid
 ```
 
-Also you can use systemd unit, see [miniseekd.service](miniseekd.service)
+Do not forgot forward `listen-port` on your router, nightseekd should be
+reachable from the Internet. See https://www.slsknet.org/news/node/606
+
+Check your port on https://www.slsknet.org/porttest.php?port=50300
+(replace 50300 in URL with your actual listen port).
+
+Also you can use systemd unit, see [nightseekd.service](nightseekd.service)
 example file.
 
 ## Signals

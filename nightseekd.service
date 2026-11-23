@@ -6,7 +6,7 @@ Wants=network-online.target
 [Service]
 Type=simple
 # adjust the paths to your installation
-ExecStart=/usr/local/bin/miniseekd --config /etc/miniseekd/config.toml
+ExecStart=/usr/local/bin/nightseekd --config /etc/nightseekd/config.toml
 # SIGHUP re-reads the configuration, rescans the shares and reopens the log file
 ExecReload=/bin/kill -HUP $MAINPID
 Restart=on-failure
@@ -17,7 +17,7 @@ Group=soulseek
 NoNewPrivileges=true
 ProtectSystem=strict
 ProtectHome=read-only
-ReadWritePaths=/var/log/miniseekd
+ReadWritePaths=/var/log/nightseekd
 
 [Install]
 WantedBy=multi-user.target

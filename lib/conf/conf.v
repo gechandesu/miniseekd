@@ -5,11 +5,11 @@ import toml
 
 pub struct SoulseekConf {
 pub mut:
-	address     string = 'vps.slsknet.org' @[toml: 'server-host']
-	port        int    = 2271              @[toml: 'server-port']
+	server_host string = 'vps.slsknet.org' @[toml: 'server-host']
+	server_port int    = 2271              @[toml: 'server-port']
 	username    string
 	password    string
-	listen_ip   string = '0.0.0.0' @[toml: 'listen-host']
+	listen_host string = '0.0.0.0' @[toml: 'listen-host']
 	listen_port int    = 50300     @[toml: 'listen-port']
 	description string = 'A Soulseek user'
 }
@@ -88,10 +88,10 @@ pub fn (c Config) validate() ! {
 	if c.soulseek.password == '' {
 		return error('soulseek.password must not be empty (or set SLSK_PASSWORD/SLSK_PASSWORD_FILE)')
 	}
-	if c.soulseek.address == '' {
+	if c.soulseek.server_host == '' {
 		return error('soulseek.server-host must not be empty')
 	}
-	check_port('soulseek.server-port', c.soulseek.port)!
+	check_port('soulseek.server-port', c.soulseek.server_port)!
 	check_port('soulseek.listen-port', c.soulseek.listen_port)!
 	if c.shares.directories.len == 0 {
 		return error('shares.directories must contain at least one directory')
