@@ -75,7 +75,7 @@ jobs:
           path: .
 
       - name: Prepare binaries
-        run: sh mkdist
+        run: sh mkdist.sh
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
